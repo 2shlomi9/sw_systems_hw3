@@ -5,7 +5,6 @@
 #include "StrList.h"
 
 void getString(char** readFromUser) {
-    // Clear input buffer
     printf("You can write");
     while (getchar() != '\n');
     
