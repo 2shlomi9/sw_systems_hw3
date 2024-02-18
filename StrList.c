@@ -461,11 +461,9 @@ void StrList_sort( StrList* StrList){
     printf("\n nood head is %s", current_i->_data);
 
     for (int i = 0; i < len-1; i++){
-                        printf("\n place in i -> "); 
-                StrList_printAt(StrList,i);
+        StrList_printAt(StrList,i);
         Node* current_j = current_i->_next;
         for (int j = i+1; j < len; j++){
-            printf("\n place in j -> "); 
                 StrList_printAt(StrList,j);
             if (strcmp(current_j->_data, current_i->_data) < 0) {
                 StrList_swap(StrList,current_i,current_j);                

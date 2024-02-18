@@ -4,104 +4,202 @@
 #include <stdio.h>
 #include "StrList.h"
 
-void StrList_swap(StrList* Strlist, int index1, int index2) ;
+void getString(char** readFromUser) {
+    // Clear input buffer
+    printf("You can write");
+    while (getchar() != '\n');
+    
+
+    char buffer[50]; 
+    fgets(buffer, sizeof(buffer), stdin);
+
+    size_t inputLength = strlen(buffer);
+
+    *readFromUser = (char *)malloc((inputLength + 1) * sizeof(char));
+    if (*readFromUser == NULL) {
+        printf("Memory allocation failed.\n");
+        return;
+    }
+
+    strcpy(*readFromUser, buffer);
+
+    if ((*readFromUser)[inputLength - 1] == '\n')
+        (*readFromUser)[inputLength - 1] = '\0';   
+
+    int len = strlen(*readFromUser);
+    int flag = 1;
+    for (int i = 0; i < len; i++) {
+        if ((*readFromUser)[i] == ' ') {
+            flag = 0;
+            break; // No need to continue, we already found a space
+        }
+    }
+    if (flag == 0) {
+        printf("\nInput contains spaces, only one word allowed!\n"); 
+        free(*readFromUser);
+        *readFromUser = NULL; // Set to NULL to indicate failure or invalid input
+    }
+}
+
 
 int main() {
-    // Create a new empty StrList
+    int chose;
+    int stop = 1;
+    
     StrList* list = StrList_alloc();
-
-    // Insert elements into the list
-    StrList_insertLast(list, "apple");
-    StrList_insertLast(list, "banana");
-    StrList_insertLast(list, "orange");
-    StrList_insertLast(list, "kiwi");
-    StrList_insertLast(list, "car");
-
-    StrList_insertLast(list, "google");
-
-    StrList_insertLast(list, "fml");
-
-    StrList_insertLast(list, "bdkmv");
-
-
-    // Print the original list
-    printf("Original List:\n");
-    StrList_print(list);
-
-    // Insert an element at index 2
-    StrList_insertAt(list, "grape", 2);
-
-    // Print the modified list
-    printf("\nList after insertion at index 2:\n");
-    StrList_print(list);
-
-    // Insert an element at index 2
-    StrList_insertAt(list, "grape", 2);
-
-    // Print the modified list
-    printf("\nList after insertion at index 2:\n");
-    StrList_print(list);
-
-
-    // Print the number of chars
-    printf("\nList numbers of char: %d\n", StrList_printLen(list));
+    while(stop!=0){
+        scanf("%d" , &chose );
     
-    // Print how many time the string "grape" shows
-    printf("\ngrape shows %d times\n", StrList_count(list,"grape"));
+        if (chose == 1) {
+            printf("\nPress 'A' to add to the list: ");
+            char read;
+            scanf(" %c", &read); 
 
-    // Print the first data in the list
-    printf("\nFirst data in the list: %s\n", StrList_firstData(list));
+        if (read == 'A') {
+            printf("\nChoose the number of words to add to the list: ");
+            int numOfStrings;
+            scanf(" %d", &numOfStrings);
 
-    // Print the length of the list
-    printf("Length of the list: %zu\n", StrList_size(list));
+            while (getchar() != '\n');
 
-    // Print the word at index 3
-    printf("Word at index 3: ");
-    StrList_printAt(list, 3);
+            printf("\nYou can write:\n ");
+            char *readFromUser; 
+            char buffer[50]; 
 
-    // Remove an element from the list
-    StrList_remove(list, "banana");
+            fgets(buffer, sizeof(buffer), stdin);
 
-    // Print the list after removal
-    printf("\nList after removing 'banana':\n");
-    StrList_print(list);
+            size_t inputLength = strlen(buffer);
 
-    // Remove an element from the list
-    StrList_remove(list, "grape");
+            readFromUser = (char *)malloc((inputLength + 1) * sizeof(char));
 
-    // Print the list after removal
-    printf("\nList after removing 'grape':\n");
-    StrList_print(list);
+            if (readFromUser == NULL) {
+            printf("Memory allocation failed.\n");
+            return 0;
+            }
 
-    // Clone the list
-    StrList* clone = StrList_clone(list);
+            strcpy(readFromUser, buffer);
 
-    // Check if the clone is equal to the original list
-    printf("\nIs the clone equal to the original list? %s\n", StrList_isEqual(list, clone) ? "Yes" : "No");
+            if (readFromUser[inputLength - 1] == '\n')
+            readFromUser[inputLength - 1] = '\0';
 
-    // Reverse the list
-    StrList_reverse(list);
-    
-    // Print the length of the list
-    printf("Length of the list: %zu\n", StrList_size(list));
+            printf("You insert to the list: %s\n", readFromUser);
 
-    // Print the reversed list
-    printf("\nReversed list:\n");
-    StrList_print(list);
+ 
+            char *stringsList[numOfStrings]; 
+            int currentStringIndex = 0; 
 
-    // Sort the list
-    StrList_sort(list);
+            for (int i = 0; i < numOfStrings; i++) {
+                stringsList[i] = (char *)malloc(1 * sizeof(char)); 
+                stringsList[i][0] = '\0'; 
+            }
 
-    // Print the sorted list
-    printf("\nSorted list:\n");
-    StrList_print(list);
+            for (int i = 0; readFromUser[i] != '\0'; i++) {
+                if (readFromUser[i] != ' ') {
+                    int length = strlen(stringsList[currentStringIndex]);
+                    stringsList[currentStringIndex] = (char *)realloc(stringsList[currentStringIndex], (length + 2) * sizeof(char));
+                    stringsList[currentStringIndex][length] = readFromUser[i];
+                    stringsList[currentStringIndex][length + 1] = '\0'; 
+                } else {
+                    currentStringIndex++;
+                    if (currentStringIndex >= numOfStrings) {
+                        printf("Invalid input: too many words.\n");
+                        break; 
+                    }
+                    }
+            }   
 
-    // Check if the list is sorted
-    printf("\nIs the list sorted? %s\n", StrList_isSorted(list) ? "Yes" : "No");
+            for (int i = 0; i < numOfStrings; i++) {
+                StrList_insertLast(list, stringsList[i]);
 
-    // Free memory allocated for the list and its clone
+                free(stringsList[i]);
+            }  
+            free(readFromUser);       
+        }
+
+        }else if(chose == 2) {
+            printf("choose index\n:");
+            int index;
+            scanf("%d", &index);
+            printf("Word at index %d: ", index);
+            printf("\nYou can write:\n ");
+
+            char* readFromUser;
+            getString(&readFromUser);
+            printf("%s\nS", readFromUser);
+            StrList_insertAt(list, readFromUser,index);
+            free(readFromUser);    
+
+        }else if (chose == 3) {
+            printf("\nThe full List:\n");
+
+            StrList_print(list);
+            
+
+            
+        }else if (chose == 4) {
+            printf("Length of the list: %zu\n", StrList_size(list));
+
+        }else if (chose == 5) {
+            printf("choose index\n:");
+            int index;
+            printf("Word at index %d: ", index);
+            scanf(" %d", &index);
+            StrList_printAt(list, index);
+
+        }else if (chose == 6) {
+            printf("\nList numbers of char: %d\n", StrList_printLen(list));            
+
+        }else if (chose == 7) {
+            char* readFromUser;
+            getString(&readFromUser);
+            printf("%s\nS", readFromUser);
+            printf("\nthe word %s shows %d times\n",readFromUser, StrList_count(list,readFromUser));
+            free(readFromUser);  
+
+        }else if (chose == 8) {
+            printf("Write which word do you want to delete from the list\n");
+            char* readFromUser;
+            getString(&readFromUser);
+            printf("%s\nS", readFromUser);
+             
+            StrList_remove(list, readFromUser);
+            free(readFromUser);
+
+        }else if (chose == 9) {
+            printf("choose index that you want to remove\n:");
+            int index;
+            scanf("%d", &index);
+            
+            StrList_removeAt(list,index);
+            printf("Word at index %d removed ", index);
+
+
+        }else if (chose == 10) {
+            StrList_reverse(list);
+
+        }else if (chose == 11) {
+            int listLen = StrList_size(list);
+
+            while (listLen>=0)
+            {
+                StrList_removeAt(list,0);
+                listLen--;
+
+            }
+
+        }else if (chose == 12) {
+            StrList_sort(list);
+
+        }else if (chose == 13) {
+            printf("\nIs the list sorted? %s\n", StrList_isSorted(list) ? "Yes" : "No");
+
+        }else if (chose == 0) {
+            stop = 0;
+        }
+    }
     StrList_free(list);
-    StrList_free(clone);
 
     return 0;
+
 }
+   
