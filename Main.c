@@ -47,6 +47,22 @@ int main() {
     
     StrList* list = StrList_alloc();
     while(stop!=0){
+    printf("Choose from the next menu \n"
+        "1- Insert strings to the list. Press 'A' to enter how many words you want to insert, then enter the words consecutively, with spaces separating each word. Each new word will be inserted at the end of the list.\n"
+       "2- Insert string at a specific index. Enter an index and then enter the string to insert it at the appropriate position.\n"
+       "3- Print the list.\n"
+       "4- Print the length of the list.\n"
+       "5- Print a string at a specific index.\n"
+       "6- Print the number of occurrences of each character in the entire list.\n"
+       "7- Receive a string and print how many times it appears.\n"
+       "8- Receive a string and remove all its occurrences from the list.\n"
+       "9- Receive an index and remove the corresponding item.\n"
+       "10- Reverse the list.\n"
+       "11- Delete the entire list.\n"
+       "12- Sort the list lexically.\n"
+       "13- Check if the list is sorted lexically.\n"
+       "0- Exit the program.\n");
+
         scanf("%d" , &chose );
     
         if (chose == 1) {
