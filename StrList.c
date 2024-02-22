@@ -384,10 +384,6 @@ Node* StrList_getNodeAt(StrList* Strlist, int index) {
 void StrList_swap(StrList* Strlist, Node* p1, Node* p2) {
     if (!p1 || !p2 || p1 == p2 || !Strlist->_head) return;
 
-    printf("\n Noodes to swap - %s, %s :" , p1->_data,p2->_data);
-
-
-    printf("\n Before swap \n");
     StrList_print(Strlist);
     
 
@@ -416,41 +412,6 @@ void StrList_swap(StrList* Strlist, Node* p1, Node* p2) {
 }
 
 /*
-* Swap places of two nodes in LinkList by their indices
-*/
-
-// void StrList_swap(StrList* Strlist, int index1, int index2) {
-//     printf("\n Before swap \n");
-//     StrList_print(Strlist);
-//     Node* p1 = StrList_getNodeAt(Strlist, index1);
-//     Node* p2 = StrList_getNodeAt(Strlist, index2);
-//     if (!p1 || !p2 || p1 == p2 || !Strlist->_head) return;
-
-//     Node *prev_p1 = NULL, *prev_p2 = NULL;
-//     Node *current = Strlist->_head;
-
-//     while (current) {
-//         if (current->_next == p1) prev_p1 = current;
-//         if (current->_next == p2) prev_p2 = current;
-//         current = current->_next;
-//     }
-
-//     if (!prev_p1 || !prev_p2) return;
-
-//     if (prev_p1) prev_p1->_next = p2;
-//     else Strlist->_head = p2;
-
-//     if (prev_p2) prev_p2->_next = p1;
-//     else Strlist->_head = p1;
-
-//     Node* temp = p1->_next;
-//     p1->_next = p2->_next;
-//     p2->_next = temp;
-//     printf("\n After swap \n");
-//     StrList_print(Strlist);
-// }
-
-/*
  * Sort the given list in lexicographical order 
  */
 void StrList_sort( StrList* StrList){
@@ -458,7 +419,6 @@ void StrList_sort( StrList* StrList){
 
     int len = StrList->_size;
     Node* current_i = StrList->_head;
-    printf("\n nood head is %s", current_i->_data);
 
     for (int i = 0; i < len-1; i++){
         StrList_printAt(StrList,i);

@@ -5,7 +5,6 @@
 #include "StrList.h"
 
 void getString(char** readFromUser) {
-    printf("You can write");
     while (getchar() != '\n');
     
 
@@ -44,9 +43,6 @@ void getString(char** readFromUser) {
 int main() {
     int chose;
     int stop = 1;
-    
-    StrList* list = StrList_alloc();
-    while(stop!=0){
     printf("Choose from the next menu \n"
         "1- Insert strings to the list. Press 'A' to enter how many words you want to insert, then enter the words consecutively, with spaces separating each word. Each new word will be inserted at the end of the list.\n"
        "2- Insert string at a specific index. Enter an index and then enter the string to insert it at the appropriate position.\n"
@@ -62,15 +58,21 @@ int main() {
        "12- Sort the list lexically.\n"
        "13- Check if the list is sorted lexically.\n"
        "0- Exit the program.\n");
+    
+    StrList* list = StrList_alloc();
+    while(stop!=0){
+    
 
         scanf("%d" , &chose );
     
         if (chose == 1) {
             printf("\nPress 'A' to add to the list: ");
-            char read;
-            scanf(" %c", &read); 
+            char* read;
+            char* chooseA = "A";
+            
+        getString(&read);
 
-        if (read == 'A') {
+        if (strcmp(read, chooseA) == 0) {
             printf("\nChoose the number of words to add to the list: ");
             int numOfStrings;
             scanf(" %d", &numOfStrings);
@@ -130,6 +132,12 @@ int main() {
             }  
             free(readFromUser);       
         }
+        else{
+            StrList_insertLast(list, read);
+            printf("You insert to the list: %s\n", read);
+
+            free(read);
+        }
 
         }else if(chose == 2) {
             printf("choose index\n:");
@@ -155,10 +163,10 @@ int main() {
             printf("Length of the list: %zu\n", StrList_size(list));
 
         }else if (chose == 5) {
-            printf("choose index\n:");
+            printf("choose index;\n");
             int index;
-            printf("Word at index %d: ", index);
             scanf(" %d", &index);
+            printf("\nWord at index %d: ", index);
             StrList_printAt(list, index);
 
         }else if (chose == 6) {
