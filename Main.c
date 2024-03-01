@@ -133,7 +133,6 @@ int main() {
             }
             case 0: {
                 stop = 0;
-                printf("\n");
                 break;
             }
             default: {
