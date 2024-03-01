@@ -162,6 +162,7 @@ int main() {
         else if (chose == 0) {
 
             stop = 0;
+            printf("\n");
         } 
         
     } while(stop!=0);
