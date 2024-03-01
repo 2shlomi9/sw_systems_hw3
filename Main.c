@@ -4,9 +4,26 @@
 #include <stdio.h>
 #include "StrList.h"
 
-#define BUFFER 50
-#define CHUNK 12
+#define CHUNK 12;
 
+// char* getStringList(){
+//     char* input = NULL;
+//     char tempbuf[CHUNK];
+//     size_t inputlen = 0;
+//     size_t templen = 0;
+//     do{
+//         fgets(tempbuf,CHUNK,stdin);
+//         templen = strlen(tempbuf);
+//         input = realloc(input, inputlen+templen+1);
+//         strcpy(input + inputlen,tempbuf);
+//         inputlen += templen;
+//         if ((*(input + inputlen - 1)) == '\n'){
+//             *(input + inputlen - 1) = '\0';   
+//         }
+//     }while (templen == CHUNK-1 && tempbuf[CHUNK-2] != '\n');
+    
+//     return input;
+// }
 char* getString(FILE *fp){
     char *str;
     int ch;
@@ -25,6 +42,8 @@ char* getString(FILE *fp){
 
     return realloc(str, sizeof(*str)*len);
 }
+
+
 int main() {
     int chose;
     int stop = 1;
@@ -34,7 +53,7 @@ int main() {
         scanf("%d", &chose);
         switch (chose) {
             case 1: {
-              int numOfStrings;
+                int numOfStrings;
                 scanf("%d", &numOfStrings);
                 getchar();
                 char *readFromUser = getString(stdin);
@@ -63,15 +82,15 @@ int main() {
                     }
                 }
                 
-                free(readFromUser); // Free the original input strin
+                free(readFromUser); // Free the original input string
                 break;
             }
             case 2: {
                 int index;
                 scanf("%d", &index);
-                char insertString [BUFFER]; 
-                fgets(insertString,sizeof(insertString),stdin);
-                StrList_insertAt(list, insertString,index);
+                char* readFromUser = getString(stdin);
+                StrList_insertAt(list, readFromUser,index);
+                free(readFromUser);
                 break;
             }
             case 3: {
@@ -93,16 +112,15 @@ int main() {
                 break;
             }
             case 7: {
-				char insertString[BUFFER] = {0};
+				char insertString[50] = {0};
 				scanf("%s", insertString);
 				printf("%d\n", StrList_count(list, insertString));
 				break;
-                break;
             }
             case 8: {
-                char insertString [BUFFER]; 
-                fgets(insertString,sizeof(insertString),stdin);
-                StrList_remove(list, insertString);
+                char* readFromUser = getString(stdin);
+                StrList_remove(list, readFromUser);
+                free(readFromUser);
                 break;
             }
             case 9: {
