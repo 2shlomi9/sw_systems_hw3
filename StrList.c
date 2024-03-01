@@ -162,14 +162,13 @@ void StrList_print(const StrList* StrList){
     else{
         const Node* p1 = StrList->_head;
         int i = 0;
-        while(i<StrList->_size-1){
+        while(i < StrList->_size-1){
             printf("%s ",p1->_data);
             p1 = p1->_next;
             i++;
         }
-        printf("%s",p1->_data);
+        printf("%s", p1->_data); // Print the last element without a space
     }
-    
 }
 
 /*

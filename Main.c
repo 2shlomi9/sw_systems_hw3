@@ -31,7 +31,6 @@ void printIfChoseNotZero(int chose,int lastChose){
         printf("\n");
     }
     
-
 }
 
 
@@ -68,7 +67,7 @@ int main() {
                 while (readFromUser[index] != ' ' && readFromUser[index] != '\0') {
                     insertToList[j++] = readFromUser[index++];
                 }
-                insertToList[j+1] = '\0'; // Null-terminate the string
+                insertToList[j] = '\0'; // Null-terminate the string
 
                     
                 StrList_insertLast(list, insertToList);
@@ -87,9 +86,9 @@ int main() {
         else if (chose == 2) {
             int index;
             scanf("%d", &index);
-            char* readFromUser = getString(stdin);
-            StrList_insertAt(list, readFromUser,index);
-            free(readFromUser);
+            char insertString[50] = {0};
+            scanf("%s", insertString);
+            StrList_insertAt(list, insertString,index);
             lastChose = chose;
 
         } 
