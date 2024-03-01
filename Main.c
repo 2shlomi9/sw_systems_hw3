@@ -4,47 +4,27 @@
 #include <stdio.h>
 #include "StrList.h"
 
-#define CHUNK 100
+#define BUFFER 50
+#define CHUNK 12
 
-char* getStringList(){
-    char* input = NULL;
-    char tempbuf[CHUNK];
-    size_t inputlen = 0;
-    size_t templen = 0;
-    do{
-        fgets(tempbuf,CHUNK,stdin);
-        templen = strlen(tempbuf);
-        input = realloc(input, inputlen+templen+1);
-        strcpy(input + inputlen,tempbuf);
-        inputlen += templen;
-        if ((*(input + inputlen - 1)) == '\n'){
-            *(input + inputlen - 1) = '\0';   
+char* getString(FILE *fp){
+    char *str;
+    int ch;
+    size_t len = 0;
+    size_t size = CHUNK;
+    str = realloc(NULL, sizeof(*str)*size);//size is start size
+    if(!str)return str;
+    while(EOF!=(ch=fgetc(fp)) && ch != '\n'){
+        str[len++]=ch;
+        if(len==size){
+            str = realloc(str, sizeof(*str)*(size+=16));
+            if(!str)return str;
         }
-    }while (templen == CHUNK-1 && tempbuf[CHUNK-2] != '\n');
-    
-    return input;
-}
-
-void getString(char** readFromUser) {    
-
-    char buffer[50]; 
-    fgets(buffer, sizeof(buffer), stdin);
-
-    size_t inputLength = strlen(buffer);
-
-    *readFromUser = (char *)malloc((inputLength + 1) * sizeof(char));
-    if (*readFromUser == NULL) {
-        printf("Memory allocation failed.\n");
-        return;
     }
+    str[len++]='\0';
 
-    strcpy(*readFromUser, buffer);
-
-    if ((*readFromUser)[inputLength - 1] == '\n')
-        (*readFromUser)[inputLength - 1] = '\0';   
+    return realloc(str, sizeof(*str)*len);
 }
-
-
 int main() {
     int chose;
     int stop = 1;
@@ -54,14 +34,14 @@ int main() {
         scanf("%d", &chose);
         switch (chose) {
             case 1: {
-                int numOfStrings;
+              int numOfStrings;
                 scanf("%d", &numOfStrings);
                 getchar();
-                char *readFromUser = getStringList();
+                char *readFromUser = getString(stdin);
         
                 int index = 0;
                 for (int i = 0; i < numOfStrings; i++) {
-                    char *insertToList = malloc(strlen(readFromUser) + 1); // Allocate memory for each string
+                    char *insertToList = malloc(strlen(readFromUser)); // Allocate memory for each string
                     if (insertToList == NULL) {
                         fprintf(stderr, "Memory allocation failed\n");
                         return 1;
@@ -72,7 +52,8 @@ int main() {
                     while (readFromUser[index] != ' ' && readFromUser[index] != '\0') {
                         insertToList[j++] = readFromUser[index++];
                     }
-                    insertToList[j] = '\0'; // Null-terminate the string
+                    insertToList[j+1] = '\0'; // Null-terminate the string
+
                     
                     StrList_insertLast(list, insertToList);
                     
@@ -82,17 +63,15 @@ int main() {
                     }
                 }
                 
-                free(readFromUser); // Free the original input string
+                free(readFromUser); // Free the original input strin
                 break;
             }
             case 2: {
                 int index;
                 scanf("%d", &index);
-                char* readFromUser;
-                getString(&readFromUser);
-                StrList_insertAt(list, readFromUser,index);
-                free(readFromUser);
-                index++;
+                char insertString [BUFFER]; 
+                fgets(insertString,sizeof(insertString),stdin);
+                StrList_insertAt(list, insertString,index);
                 break;
             }
             case 3: {
@@ -114,17 +93,16 @@ int main() {
                 break;
             }
             case 7: {
-                char* readFromUser;
-                getString(&readFromUser);
-                printf("%d\n",StrList_count(list,readFromUser));
-                free(readFromUser);
+				char insertString[BUFFER] = {0};
+				scanf("%s", insertString);
+				printf("%d\n", StrList_count(list, insertString));
+				break;
                 break;
             }
             case 8: {
-                char* readFromUser;
-                getString(&readFromUser);
-                StrList_remove(list, readFromUser);
-                free(readFromUser);
+                char insertString [BUFFER]; 
+                fgets(insertString,sizeof(insertString),stdin);
+                StrList_remove(list, insertString);
                 break;
             }
             case 9: {
@@ -159,7 +137,7 @@ int main() {
                 break;
             }
             default: {
-                printf("Invalid option. Please enter a number from 0 to 13.\n");
+                printf("Enter a number from 0 to 13.\n");
                 break;
             }
         }

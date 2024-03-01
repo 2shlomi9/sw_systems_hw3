@@ -227,15 +227,19 @@ int StrList_printLen(const StrList* Strlist){
 /*
 Given a string, return the number of times it exists in the list.
 */
-int StrList_count(StrList* StrList, const char* data){
-    const Node* p = StrList->_head;
+int StrList_count(StrList* list, const char* data) {
+    if (!list)
+    {
+        return 0;
+    }
+    
     int count = 0;
-    while(p){
-        if (strcmp(p->_data,data) == 0)
-        {
+    Node* current = list->_head;
+    while (current) {
+        if (strcmp(current->_data, data) == 0) {
             count++;
         }
-        p = p->_next;
+        current = current->_next;
     }
     return count;
 }
@@ -394,8 +398,6 @@ Node* StrList_getNodeAt(StrList* Strlist, int index) {
 */
 void StrList_swap(StrList* Strlist, Node* p1, Node* p2) {
     if (!p1 || !p2 || p1 == p2 || !Strlist->_head) return;
-
-    StrList_print(Strlist);
     
 
     Node *prev_p1 = NULL, *prev_p2 = NULL;
@@ -418,8 +420,7 @@ void StrList_swap(StrList* Strlist, Node* p1, Node* p2) {
     Node* temp = p1->_next;
     p1->_next = p2->_next;
     p2->_next = temp;
-    printf("\n After swap \n");
-    StrList_print(Strlist);
+
 }
 
 /*
@@ -432,10 +433,9 @@ void StrList_sort( StrList* StrList){
     Node* current_i = StrList->_head;
 
     for (int i = 0; i < len-1; i++){
-        StrList_printAt(StrList,i);
+
         Node* current_j = current_i->_next;
         for (int j = i+1; j < len; j++){
-                StrList_printAt(StrList,j);
             if (strcmp(current_j->_data, current_i->_data) < 0) {
                 StrList_swap(StrList,current_i,current_j);                
 
