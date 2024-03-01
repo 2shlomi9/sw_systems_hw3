@@ -169,7 +169,6 @@ void StrList_print(const StrList* StrList){
         }
         printf("%s",p1->_data);
     }
-    printf("\n");
     
 }
 
